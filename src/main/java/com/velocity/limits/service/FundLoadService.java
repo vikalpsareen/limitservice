@@ -106,7 +106,7 @@ public class FundLoadService {
         List<FundLoad> weeklyLoads = fundLoadRepository.findByCustomerIdAndTimeBetween(
                 fundLoad.getCustomerId(), startOfWeek, endOfWeek);
 
-        if (weeklyLoads.size() >= 3) {
+        if (weeklyLoads.size() >= 3) { //This can be taken from configuration file
             return false; // Exceeded the maximum number of loads per week
         }
 
@@ -115,7 +115,7 @@ public class FundLoadService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .add(fundLoad.getLoadAmount());
 
-        if (weeklyTotal.add(fundLoad.getLoadAmount()).compareTo(new BigDecimal(maxWeeklyLoadAmount)) > 0) { // This can be taken from configuration file
+        if (weeklyTotal.add(fundLoad.getLoadAmount()).compareTo(new BigDecimal(maxWeeklyLoadAmount)) > 0) {
             return false; // Exceeded the maximum weekly load amount
         }
 
