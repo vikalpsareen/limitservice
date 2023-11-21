@@ -52,14 +52,18 @@ public class FundLoadService {
      * @param fundLoadRequest The fund load request to be processed.
      */
     public FundStatus processLoad(FundLoadRequest fundLoadRequest) {
-        // Convert FundLoadRequest to FundLoadEntity
-        FundLoad fundLoad = mapToEntity(fundLoadRequest);
+        try {
+            FundLoad fundLoad = mapToEntity(fundLoadRequest);
 
-        if (isLoadAccepted(fundLoad)) {
-            fundLoadRepository.save(fundLoad);
-            return fundAccepted(fundLoad);
-        } else {
-            return fundRejected(fundLoad);
+            if (isLoadAccepted(fundLoad)) {
+                fundLoadRepository.save(fundLoad);
+                return fundAccepted(fundLoad);
+            } else {
+                return fundRejected(fundLoad);
+            }
+        } catch (Exception e) {
+            logger.error("Error processing fund load", e);
+            throw new RuntimeException("Error processing fund load");
         }
     }
 
